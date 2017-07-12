@@ -259,8 +259,9 @@ public class GCEMSTimeSheet extends Application
         HBox hboxNightRun = new HBox();
         Label lblRunNumber = new Label("Run Number");
         TextField tfRunNumber = new TextField();
-        Label lblNightOut = new Label("Out:______");
-        Label lblNightIn = new Label("In:_____");
+        Label lblNightOut = new Label("Out: ");
+        ComboBox cboNightHour = new ComboBox();
+        Label lblNightIn = new Label("In: ");
         Label lblNightElapsedTime = new Label("Elapsed Time:_____");
         CheckBox chkBoxNight = new CheckBox();
         
@@ -288,6 +289,33 @@ public class GCEMSTimeSheet extends Application
     
         }
         */
+    }
+    
+    public class TimeDials extends ComboBox
+    {
+        ComboBox cboMinuteDial = new ComboBox();
+        ComboBox cboHourDial = new ComboBox();
+        
+        public TimeDials()
+        {
+            
+        }
+        
+        public <minuteDial extends ComboBox> minuteDial makeMinuteDial()
+        {
+            
+            cboMinuteDial.getItems().addAll(00, 15, 30, 45);
+            return (minuteDial) cboMinuteDial.getParent();
+        }
+        
+        public <hourDial extends ComboBox> hourDial makeHourDial()
+        {
+            for (int j = 0; j < 24; j++)
+            {
+                cboHourDial.getItems().add(j);
+            }
+            return (hourDial) cboHourDial.getParent();
+        }
     }
     
     /**
