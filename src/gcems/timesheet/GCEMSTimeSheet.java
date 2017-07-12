@@ -37,13 +37,13 @@ import javafx.stage.Stage;
  */
 public class GCEMSTimeSheet extends Application
 {
-    double hoursPTO = 0;    //hoursPTO = the number of paid hours for vacation days, personal days, sick days
+    double weekHoursPTO = 0;    //hoursPTO = the number of paid hours for vacation days, personal days, sick days
         //and the 8 hours of holiday hours.
         
-    double hoursOT = 0;    //hoursOT = Number of overtime hours.  These may be from hours worked over 40 hours per week
+    double weekHoursOT = 0;    //hoursOT = Number of overtime hours.  These may be from hours worked over 40 hours per week
         //or hours over scheduled shift times
         
-    double hoursReg = 0;    //hoursReg = Number of hours which will be paid at regular pay.
+    double weekHoursReg = 0;    //hoursReg = Number of hours which will be paid at regular pay.
     int nightCounter = 0; // Used to add new lines for night runs.
     
     
@@ -260,35 +260,75 @@ public class GCEMSTimeSheet extends Application
         Label lblRunNumber = new Label("Run Number");
         TextField tfRunNumber = new TextField();
         Label lblNightOut = new Label("Out: ");
-        ComboBox cboNightHour = new ComboBox();
+        TimeDials cboNightHourOut = new TimeDials();
+        TimeDials cboNightMinuteOut = new TimeDials();
         Label lblNightIn = new Label("In: ");
-        Label lblNightElapsedTime = new Label("Elapsed Time:_____");
+        TimeDials cboNightHourIn = new TimeDials();
+        TimeDials cboNightMinuteIn = new TimeDials();
+        Label lblNightElapsedTime = new Label("Elapsed Time: ");
+        Integer intElapsedHour = 0;
+        Integer intElapsedMinute = 0;
         CheckBox chkBoxNight = new CheckBox();
+        Label lblDisplayElapsedTime = new Label();
         
         public NightRun()
         {
+                               
             hboxNightRun.getChildren().add(chkBoxNight);
             hboxNightRun.getChildren().add(lblRunNumber);
             hboxNightRun.getChildren().add(tfRunNumber);
             hboxNightRun.getChildren().add(lblNightOut);
+            hboxNightRun.getChildren().add(cboNightHourOut.makeHourDial());
+            hboxNightRun.getChildren().add(cboNightMinuteOut.makeMinuteDial());
             hboxNightRun.getChildren().add(lblNightIn);
+            hboxNightRun.getChildren().add(cboNightHourIn.makeHourDial());
+            hboxNightRun.getChildren().add(cboNightMinuteIn.makeMinuteDial());
             hboxNightRun.getChildren().add(lblNightElapsedTime);
+            
+            //lblDisplayElapsedTime.setText(Integer.toString())
+            //I need to make a action event on the time dials.
+            //I need to pull the selected value from the dials and then send those
+            //values to the TimeCalc class
+            
         }
         
         public <nightRun extends Node> nightRun makeNightRun()
         {
-            return (nightRun) chkBoxNight.getParent();
+            return (nightRun) hboxNightRun;
         }
     }
     
-    public class DateTimeCalc
+    public class TimeCalc
     {
-        /*
-        public Integer doTimeCalc(int hour, int minute)
+        int hourOut;
+        int hourIn;
+        int hourElapsed;
+        int minuteOut;
+        int minuteIn;
+        int minuteElapsed;
+        double timeFinal;
+        
+        public double doTimeCalc(int hourOut, int hourIn, int minuteOut, int minuteIn)
         {
-    
+            minuteElapsed = minuteIn - minuteOut;
+            if (minuteElapsed < 0)
+            {
+                minuteElapsed = minuteElapsed + 60;
+                hourIn = hourIn - 1;
+            }
+            
+            hourElapsed = hourIn - hourOut;
+            if (hourElapsed < 0)
+            {
+                System.out.println("This is a placeholder error message until I can figure out how to ");
+                System.out.println("write a proper pop-up error message window");
+            }
+            
+            timeFinal = hourElapsed + ((double) minuteElapsed / (double) 60);
+            
+            return timeFinal;
         }
-        */
+        
     }
     
     public class TimeDials extends ComboBox
@@ -305,7 +345,7 @@ public class GCEMSTimeSheet extends Application
         {
             
             cboMinuteDial.getItems().addAll(00, 15, 30, 45);
-            return (minuteDial) cboMinuteDial.getParent();
+            return (minuteDial) cboMinuteDial;
         }
         
         public <hourDial extends ComboBox> hourDial makeHourDial()
@@ -314,7 +354,7 @@ public class GCEMSTimeSheet extends Application
             {
                 cboHourDial.getItems().add(j);
             }
-            return (hourDial) cboHourDial.getParent();
+            return (hourDial) cboHourDial;
         }
     }
     
