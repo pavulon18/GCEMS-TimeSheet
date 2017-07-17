@@ -7,6 +7,7 @@ package gcems.timesheet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -118,6 +119,9 @@ public class GCEMSTimeSheet extends Application
         //I want a grid pane layout for the main area.
         
         //I think I'll lay it out in scene builder so I can get a visual idea.
+        
+        
+        
         //an explaination of some of the variables I think I will need to use
         
         //I need to specify a date which is the Thursday of the first week of our pay period.
@@ -126,6 +130,8 @@ public class GCEMSTimeSheet extends Application
         //This will include entries for a 12 1st half, 12 2nd half, and 24 hour shifts
         //as well as other custom hours.
         //This will also include the option of entering night time runs
+        
+        //I have to devise a way to deal with Holidays and PTO days
     }
 
     
@@ -224,7 +230,6 @@ public class GCEMSTimeSheet extends Application
             //This button will add a new line for night time runs
             btnNewLine.setOnAction((ActionEvent e)-> 
             {
-                //nightCounter++;
                 listNightRuns.add(new NightRun());
                 int listIndex = listNightRuns.size();
                 NightRun listNode = new NightRun();
@@ -234,9 +239,30 @@ public class GCEMSTimeSheet extends Application
             //This button will remove selected lines of night time runs
             btnRemoveLine.setOnAction((ActionEvent e)->
             {
-
+                /*listNightRuns.forEach((NightRun _item) ->
+                {
+                //System.out.println(_item);
+                if(_item.chkBoxNight.isSelected())
+                {
+                //listNightRuns.remove();
+                }
+                });*/
+                
+                //cwdLine3.getChildren().removeIf(chkBoxNight.isSelected);
+                //listNightRuns.removeIf(chkBoxNight.isSelected);
+                
+                /*for (Iterator<NightRun> iterator = listNightRuns.iterator(); iterator.hasNext(); )
+                {
+                iterator.next();
+                if (listNightRuns(iterator).isSelected)
+                {
+                iterator.remove();
+                }
+                }*/
+                
+                //listNightRuns.removeIf(_item ->  NightRun.chkBoxNight.getChildren(_item).isSelected());
+                
             });
-
 
             customWorkDay.getChildren().add(cwdLine1);
             customWorkDay.getChildren().add(cwdLine2);
@@ -254,7 +280,7 @@ public class GCEMSTimeSheet extends Application
         //End of Day creation
     }
     
-    public class NightRun extends Parent
+    public class NightRun
     {
         HBox hboxNightRun = new HBox();
         Label lblRunNumber = new Label("Run Number");
@@ -289,7 +315,7 @@ public class GCEMSTimeSheet extends Application
             //I need to make a action event on the time dials.
             //I need to pull the selected value from the dials and then send those
             //values to the TimeCalc class
-            
+            //chkBoxNight.isSelected();
         }
         
         public <nightRun extends Node> nightRun makeNightRun()
