@@ -8,6 +8,8 @@ package gcems.timesheet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -239,6 +241,12 @@ public class GCEMSTimeSheet extends Application
             //This button will remove selected lines of night time runs
             btnRemoveLine.setOnAction((ActionEvent e)->
             {
+                //Right now, there is a lot of nonfunctional code in here.
+                //I am attempting to get this button to work but I keep coming up short.
+                //Below are some of the things I've tried.  Once I get a method that works
+                //I'll delete all of the rest which do not work.
+                
+                
                 /*listNightRuns.forEach((NightRun _item) ->
                 {
                 //System.out.println(_item);
@@ -261,6 +269,10 @@ public class GCEMSTimeSheet extends Application
                 }*/
                 
                 //listNightRuns.removeIf(_item ->  NightRun.chkBoxNight.getChildren(_item).isSelected());
+                
+                //final List<NightRun> filtered = original.stream().filter(item -> item.check.isSelected()).collect(Collectors.toList());
+
+                //listNightRuns.clear(); listNightRuns.addAll(filtered);
                 
             });
 
@@ -318,46 +330,13 @@ public class GCEMSTimeSheet extends Application
             //chkBoxNight.isSelected();
         }
         
-        public <nightRun extends Node> nightRun makeNightRun()
+        public <nightRun> nightRun makeNightRun()
         {
             return (nightRun) hboxNightRun;
         }
     }
     
-    public class TimeCalc
-    {
-        int hourOut;
-        int hourIn;
-        int hourElapsed;
-        int minuteOut;
-        int minuteIn;
-        int minuteElapsed;
-        double timeFinal;
-        
-        public double doTimeCalc(int hourOut, int hourIn, int minuteOut, int minuteIn)
-        {
-            minuteElapsed = minuteIn - minuteOut;
-            if (minuteElapsed < 0)
-            {
-                minuteElapsed = minuteElapsed + 60;
-                hourIn = hourIn - 1;
-            }
-            
-            hourElapsed = hourIn - hourOut;
-            if (hourElapsed < 0)
-            {
-                System.out.println("This is a placeholder error message until I can figure out how to ");
-                System.out.println("write a proper pop-up error message window");
-            }
-            
-            timeFinal = hourElapsed + ((double) minuteElapsed / (double) 60);
-            
-            return timeFinal;
-        }
-        
-    }
-    
-    public class TimeDials extends ComboBox
+    public class TimeDials
     {
         ComboBox cboMinuteDial = new ComboBox();
         ComboBox cboHourDial = new ComboBox();
@@ -367,14 +346,14 @@ public class GCEMSTimeSheet extends Application
             
         }
         
-        public <minuteDial extends ComboBox> minuteDial makeMinuteDial()
+        public <minuteDial> minuteDial makeMinuteDial()
         {
             
             cboMinuteDial.getItems().addAll(00, 15, 30, 45);
             return (minuteDial) cboMinuteDial;
         }
         
-        public <hourDial extends ComboBox> hourDial makeHourDial()
+        public <hourDial> hourDial makeHourDial()
         {
             for (int j = 0; j < 24; j++)
             {
