@@ -150,10 +150,10 @@ public class GCEMSTimeSheet extends Application
         Label lblWholeShift = new Label("In:  0800     Out:  0800");
         Label lblCustomShift = new Label("Custom Shift Placeholder");
         ComboBox<String> cbShiftDuration = new ComboBox<>();
-        ComboBox<Integer> cboCustomHourIn = new ComboBox<>();
-        ComboBox<Integer> cboCustomMinuteIn = new ComboBox<>();
-        ComboBox<Integer> cboCustomHourOut = new ComboBox<>();
-        ComboBox<Integer> cboCustomMinuteOut = new ComboBox<>();
+        TimeDials cboCustomHourIn = new TimeDials();
+        TimeDials cboCustomMinuteIn = new TimeDials();
+        TimeDials cboCustomHourOut = new TimeDials();
+        TimeDials cboCustomMinuteOut = new TimeDials();
         Button btnNewLine = new Button("+");
         Button btnRemoveLine = new Button("-");
         Label lblRegHours = new Label("Regular Hours: ");
@@ -170,18 +170,20 @@ public class GCEMSTimeSheet extends Application
                
         public WorkDay()
         {
+            /*
             for (int j = 0; j < 24; j++)
             {
-                cboCustomHourIn.getItems().add(j);
+            cboCustomHourIn.getItems().add(j);
             }
             
             for (int j = 0; j < 24; j++)
             {
-                cboCustomHourOut.getItems().add(j);
+            cboCustomHourOut.getItems().add(j);
             }
             
             cboCustomMinuteIn.getItems().addAll(00, 15, 30, 45);
             cboCustomMinuteOut.getItems().addAll(00, 15, 30, 45);
+            */
             
             cbShiftDuration.getItems().addAll("First Half", "Second Half", "Whole Shift", "Custom");
             cbShiftDuration.getSelectionModel().select(null);
@@ -207,11 +209,11 @@ public class GCEMSTimeSheet extends Application
                         break;
                     case "Custom":
                         cwdLine1.getChildren().add(lblCustomIn);
-                        cwdLine1.getChildren().add(cboCustomHourIn);
-                        cwdLine1.getChildren().add(cboCustomMinuteIn);
+                        cwdLine1.getChildren().add(cboCustomHourIn.makeHourDial());
+                        cwdLine1.getChildren().add(cboCustomMinuteIn.makeMinuteDial());
                         cwdLine1.getChildren().add(lblCustomOut);
-                        cwdLine1.getChildren().add(cboCustomHourOut);
-                        cwdLine1.getChildren().add(cboCustomMinuteOut);
+                        cwdLine1.getChildren().add(cboCustomHourOut.makeHourDial());
+                        cwdLine1.getChildren().add(cboCustomMinuteOut.makeMinuteDial());
                         break;
                     default:
                         break;
@@ -287,7 +289,7 @@ public class GCEMSTimeSheet extends Application
          */
         public <T extends Node> T makeWorkDay()
         {
-            return (T) cwdLine1.getParent();
+            return (T) customWorkDay;
         }
         //End of Day creation
     }
