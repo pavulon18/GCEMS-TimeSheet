@@ -38,7 +38,7 @@ import javafx.stage.Stage;
  * Copyright: 2017
  * This project was started on July 1, 2017
  */
-public class GCEMSTimeSheet extends Application
+public class GCEMSTimeSheetGUI extends Application
 {
     double weekHoursPTO = 0;    //hoursPTO = the number of paid hours for vacation days, personal days, sick days
         //and the 8 hours of holiday hours.
@@ -75,7 +75,7 @@ public class GCEMSTimeSheet extends Application
         //CustomWorkDay Week1Thursday = new CustomWorkDay();
         
         GridPane baseGrid = new GridPane();
-        baseGrid.setGridLinesVisible(true);
+        //baseGrid.setGridLinesVisible(true);
         baseGrid.addRow(0, lblHeader1);
         baseGrid.addRow(1,lblEmpName);
         baseGrid.add(txtFieldEmpName, 1, 1);
@@ -137,8 +137,12 @@ public class GCEMSTimeSheet extends Application
     }
 
     
-    public class WorkDay extends Parent
+    public class WorkDay
     {
+        /* The folowing is the initial way I was trying to do stuff.   I am going to rewrite
+        just about everything, I think.  So, I'll keep re-writing until I get it like I want it.
+        */
+        
         //Create the Day
         VBox customWorkDay = new VBox();
         HBox cwdLine1 = new HBox();
@@ -163,28 +167,15 @@ public class GCEMSTimeSheet extends Application
         Label lblCustomIn = new Label("In");
         Label lblCustomOut = new Label("Out");
         ArrayList<NightRun> listNightRuns = new ArrayList<>();
+        ArrayList<WorkDayEntryGUI> listWorkDayEntry;
         double hoursSingleShift = 0;
         double hoursNightRuns = 0;
         double hoursOT = 0;
 
                
         public WorkDay()
-        {
-            /*
-            for (int j = 0; j < 24; j++)
-            {
-            cboCustomHourIn.getItems().add(j);
-            }
-            
-            for (int j = 0; j < 24; j++)
-            {
-            cboCustomHourOut.getItems().add(j);
-            }
-            
-            cboCustomMinuteIn.getItems().addAll(00, 15, 30, 45);
-            cboCustomMinuteOut.getItems().addAll(00, 15, 30, 45);
-            */
-            
+        {       
+            this.listWorkDayEntry = new ArrayList<>();
             cbShiftDuration.getItems().addAll("First Half", "Second Half", "Whole Shift", "Custom");
             cbShiftDuration.getSelectionModel().select(null);
             cbShiftDuration.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> obs, String oldVal, String newVal) ->
@@ -219,8 +210,12 @@ public class GCEMSTimeSheet extends Application
                         break;
                 }
             });
-                
-        
+            
+            /*
+            This is the orignial setup.  After looking at it, I realized it did not
+            cover every situation.  I had to rethink my setup.  I will keep this until
+            I get everything working like I want it
+            
             cwdLine1.getChildren().add(dp);
             cwdLine1.getChildren().add(cbShiftDuration);
         
@@ -230,14 +225,30 @@ public class GCEMSTimeSheet extends Application
             cwdLine2.getChildren().add(lblVarRegHours);
             cwdLine2.getChildren().add(lblOTHours);
             cwdLine2.getChildren().add(lblVarOTHours);
+            */
+            
+            //This is the second attempt at setting up my day properly
+            cwdLine1.getChildren().addAll(dp, lblRegHours, lblOTHours, lblVarOTHours);
+            cwdLine2.getChildren().add(btnNewLine);
+            
         
             //This button will add a new line for night time runs
             btnNewLine.setOnAction((ActionEvent e)-> 
             {
+                /*
+                this is the original code I had set up.  It was used to make a new line which was strictly for night runs
+                I am going to have to rework it to make a pop-up window.
+                The popup window will then get all the needed info for regular day, PTO day, Holiday, Night run, etc
+                I will remove these lines once I get everything working.
+                
                 listNightRuns.add(new NightRun());
                 int listIndex = listNightRuns.size();
                 NightRun listNode = new NightRun();
                 customWorkDay.getChildren().add(listNightRuns.get(listIndex - 1).makeNightRun());
+                */
+                
+                listWorkDayEntry.add(new WorkDayEntryGUI());
+                
             });
 
             //This button will remove selected lines of night time runs
@@ -294,49 +305,6 @@ public class GCEMSTimeSheet extends Application
         //End of Day creation
     }
     
-    public class NightRun
-    {
-        HBox hboxNightRun = new HBox();
-        Label lblRunNumber = new Label("Run Number");
-        TextField tfRunNumber = new TextField();
-        Label lblNightOut = new Label("Out: ");
-        TimeDials cboNightHourOut = new TimeDials();
-        TimeDials cboNightMinuteOut = new TimeDials();
-        Label lblNightIn = new Label("In: ");
-        TimeDials cboNightHourIn = new TimeDials();
-        TimeDials cboNightMinuteIn = new TimeDials();
-        Label lblNightElapsedTime = new Label("Elapsed Time: ");
-        Integer intElapsedHour = 0;
-        Integer intElapsedMinute = 0;
-        CheckBox chkBoxNight = new CheckBox();
-        Label lblDisplayElapsedTime = new Label();
-        
-        public NightRun()
-        {
-                               
-            hboxNightRun.getChildren().add(chkBoxNight);
-            hboxNightRun.getChildren().add(lblRunNumber);
-            hboxNightRun.getChildren().add(tfRunNumber);
-            hboxNightRun.getChildren().add(lblNightOut);
-            hboxNightRun.getChildren().add(cboNightHourOut.makeHourDial());
-            hboxNightRun.getChildren().add(cboNightMinuteOut.makeMinuteDial());
-            hboxNightRun.getChildren().add(lblNightIn);
-            hboxNightRun.getChildren().add(cboNightHourIn.makeHourDial());
-            hboxNightRun.getChildren().add(cboNightMinuteIn.makeMinuteDial());
-            hboxNightRun.getChildren().add(lblNightElapsedTime);
-            
-            //lblDisplayElapsedTime.setText(Integer.toString())
-            //I need to make a action event on the time dials.
-            //I need to pull the selected value from the dials and then send those
-            //values to the TimeCalc class
-            //chkBoxNight.isSelected();
-        }
-        
-        public <nightRun> nightRun makeNightRun()
-        {
-            return (nightRun) hboxNightRun;
-        }
-    }
     
     public class TimeDials
     {
@@ -350,7 +318,6 @@ public class GCEMSTimeSheet extends Application
         
         public <minuteDial> minuteDial makeMinuteDial()
         {
-            
             cboMinuteDial.getItems().addAll(00, 15, 30, 45);
             return (minuteDial) cboMinuteDial;
         }
