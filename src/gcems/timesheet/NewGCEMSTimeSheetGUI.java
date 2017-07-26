@@ -35,7 +35,7 @@ public class NewGCEMSTimeSheetGUI extends Application
         Label lblWeekTwo = new Label("Week Two");
         
         //create the WorkDay array and initialize it
-        GCEMSTimeSheetGUI.WorkDay[][] WorkDay_array = new GCEMSTimeSheetGUI.WorkDay[2][7];
+        WorkDayEntryGUI[][] WorkDay_array = new WorkDayEntryGUI[2][7];
         for(int k = 0; k < 2; k++)
         {
             for(int l = 0; l < 7; l++)

@@ -1,6 +1,9 @@
 package gcems.timesheet;
 
 
+import java.util.ArrayList;
+import javafx.event.ActionEvent;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -34,11 +37,41 @@ public class WorkDayEntryGUI
     Label lblVarRegHours = new Label("0");
     Label lblOTHours = new Label("Overtime Hours:  ");
     Label lblVarOTHours = new Label("0");
+    ArrayList<WorkDayEntryGUI> listWorkDayEntry;
+    DetailedDataEntry dde = new DetailedDataEntry();
     
-    public WorkDayEntryGUI()
+    WorkDayEntryGUI()
+    {
+        listWorkDayEntry = new ArrayList<>();
+        cwdLine1.getChildren().addAll(dp, lblRegHours, lblOTHours, lblVarOTHours);
+        cwdLine2.getChildren().addAll(lblRegHours, lblVarRegHours, lblOTHours, lblVarOTHours);
+        cwdLine3.getChildren().add(btnNewLine);
+
+        btnNewLine.setOnAction((ActionEvent e) ->
+        {
+            /*
+            *this button action will pop up a window and get the information described above
+             */
+
+            
+            dde.DetailedDataEntry();
+            
+        });
+
+        btnRemoveLine.setOnAction((ActionEvent e)->
             {
-                cwdLine1.getChildren().addAll(dp, lblRegHours, lblOTHours, lblVarOTHours);
-                cwdLine2.getChildren().addAll(lblRegHours, lblVarRegHours, lblOTHours, lblVarOTHours);
-                cwdLine3.getChildren().add(btnNewLine);
-            }
+                /*
+                *This button will delete the selected line(s)
+                */
+            });
+        
+        customWorkDay.getChildren().add(cwdLine1);
+        customWorkDay.getChildren().add(cwdLine2);
+        customWorkDay.getChildren().add(cwdLine3);
+    }
+
+    public <T extends Node> T makeWorkDay()
+        {
+            return (T) customWorkDay;
+        }
 }
