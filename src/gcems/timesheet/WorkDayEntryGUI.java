@@ -2,6 +2,7 @@ package gcems.timesheet;
 
 
 import java.util.ArrayList;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -43,6 +44,8 @@ public class WorkDayEntryGUI
     Label lblVarRegHours = new Label("0");
     Label lblOTHours = new Label("Overtime Hours:  ");
     Label lblVarOTHours = new Label("0");
+    Label lblCustomIn = new Label("In");
+    Label lblCustomOut = new Label("Out");
     ArrayList<WorkDayEntryGUI> listWorkDayEntry;
     //DetailedDataEntry dde = new DetailedDataEntry();
     
@@ -55,23 +58,8 @@ public class WorkDayEntryGUI
 
         btnNewLine.setOnAction((ActionEvent event) ->
         {
-            final Stage dataEntryStage = new Stage();
-            CheckBox chkBoxHoliday = new CheckBox();
-            ComboBox<String> cboPTO = new ComboBox<>();
-            ComboBox cboShiftDuration = new ComboBox();
-            VBox vBoxHolidayPTO = new VBox();
-            HBox hBoxDataEntry = new HBox();
-            chkBoxHoliday.setText("Holiday");
-            cboPTO.getItems().addAll("Sick Day", "Vacation Day", "Personal Day");
-            cboShiftDuration.getItems().addAll("First Half", "Second Half", "24 Hour Shift");
-            cboShiftDuration.getSelectionModel().select("24 Hour Shift");
             
-            hBoxDataEntry.getChildren().addAll(chkBoxHoliday, cboShiftDuration, cboPTO);
-            
-            Scene DetailedDataEntryScene = new Scene(hBoxDataEntry);
-            dataEntryStage.setScene(DetailedDataEntryScene);
-            dataEntryStage.initModality(Modality.APPLICATION_MODAL);
-            dataEntryStage.show();
+            makeDetailedDataEntry();
         });
 
         btnRemoveLine.setOnAction((ActionEvent e)->
@@ -84,6 +72,78 @@ public class WorkDayEntryGUI
         customWorkDay.getChildren().add(cwdLine1);
         customWorkDay.getChildren().add(cwdLine2);
         customWorkDay.getChildren().add(cwdLine3);
+    }
+
+    private void makeDetailedDataEntry()
+    {
+        final Stage dataEntryStage = new Stage();
+        CheckBox chkBoxHoliday = new CheckBox();
+        chkBoxHoliday.setText("Holiday");
+        ComboBox<String> cboShiftDuration = new ComboBox<>();
+        ComboBox<String> cboPTO = new ComboBox<>();
+        
+        Button btnSaveData = new Button("Save");
+        HBox hBoxDataEntry = new HBox();
+        HBox hBoxLineTwo = new HBox();
+        HBox hBoxDataEntryThree = new HBox();
+        VBox root = new VBox();
+        
+        TimeDials cboCustomHourIn = new TimeDials();
+        TimeDials cboCustomMinuteIn = new TimeDials();
+        TimeDials cboCustomHourOut = new TimeDials();
+        TimeDials cboCustomMinuteOut = new TimeDials();
+        
+        
+        cboPTO.getItems().addAll("Sick Day", "Vacation Day", "Personal Day");
+        cboShiftDuration.getItems().addAll("First Half", "Second Half", "24 Hour Shift", "Custom Hours");
+        cboShiftDuration.getSelectionModel().select("24 Hour Shift");
+        cboShiftDuration.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> obs, String oldVal, String newVal) ->
+            {
+                //hBoxDataEntryThree.getChildren().remove(lblFirstHalf);
+                //hBoxDataEntryThree.getChildren().remove(lblSecondHalf);
+                //hBoxDataEntryThree.getChildren().remove(lblWholeShift);
+                //hBoxDataEntryThree.getChildren().remove(lblCustomShift);
+                switch(newVal)
+                {
+                    case "First Half":
+                        //cwdLine1.getChildren().add(lblFirstHalf);
+                        //hoursSingleShift = 12;
+                        break;
+                    case "Second Half":
+                        //cwdLine1.getChildren().add(lblSecondHalf);
+                        //hoursSingleShift = 12;
+                        break;    
+                    case "Whole Shift":
+                        //cwdLine1.getChildren().add(lblWholeShift);
+                        //hoursSingleShift = 16;
+                        break;
+                    case "Custom Hours":
+                        hBoxDataEntryThree.getChildren().add(lblCustomIn);
+                        hBoxDataEntryThree.getChildren().add(cboCustomHourIn.makeHourDial());
+                        hBoxDataEntryThree.getChildren().add(cboCustomMinuteIn.makeMinuteDial());
+                        hBoxDataEntryThree.getChildren().add(lblCustomOut);
+                        hBoxDataEntryThree.getChildren().add(cboCustomHourOut.makeHourDial());
+                        hBoxDataEntryThree.getChildren().add(cboCustomMinuteOut.makeMinuteDial());
+                        break;
+                    default:
+                        break;
+                }
+            });
+        
+        btnSaveData.setOnAction(e ->
+        {
+            dataEntryStage.close();
+        });
+ 
+        
+        hBoxDataEntry.getChildren().addAll(chkBoxHoliday, cboShiftDuration, cboPTO);
+        hBoxLineTwo.getChildren().add(btnSaveData);
+        root.getChildren().addAll(hBoxDataEntry, hBoxLineTwo, hBoxDataEntryThree);
+        
+        Scene DetailedDataEntryScene = new Scene(root);
+        dataEntryStage.setScene(DetailedDataEntryScene);
+        dataEntryStage.initModality(Modality.APPLICATION_MODAL);
+        dataEntryStage.show();
     }
 
     public <T extends Node> T makeWorkDay()
