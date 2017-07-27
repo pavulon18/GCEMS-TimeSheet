@@ -12,6 +12,6 @@
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="GCEMS TimeSheet" >
     <param name="requiredFXVersion" value="8.0+"/>
   </applet-desc>
-  <jfx:javafx-desc  width="800" height="600" main-class="gcems.timesheet.GCEMSTimeSheet"  name="GCEMS TimeSheet" />
+  <jfx:javafx-desc  width="800" height="600" main-class="gcems.timesheet.NewGCEMSTimeSheetGUI"  name="GCEMS TimeSheet" />
   <update check="always"/>
 </jnlp>

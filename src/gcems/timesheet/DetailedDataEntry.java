@@ -57,4 +57,11 @@ class DetailedDataEntry
         dataEntryStage.initModality(Modality.APPLICATION_MODAL);
         dataEntryStage.show();
     }
+    
+    public <detailedDataEntry> void makeDetailedDataEntry()
+    {
+        //dataEntryStage.setScene(DetailedDataEntryScene);
+        dataEntryStage.initModality(Modality.APPLICATION_MODAL);
+        dataEntryStage.show();
+    }
 }

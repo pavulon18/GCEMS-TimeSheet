@@ -3,12 +3,18 @@ package gcems.timesheet;
 
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * Author:  Jim Baize
@@ -38,7 +44,7 @@ public class WorkDayEntryGUI
     Label lblOTHours = new Label("Overtime Hours:  ");
     Label lblVarOTHours = new Label("0");
     ArrayList<WorkDayEntryGUI> listWorkDayEntry;
-    DetailedDataEntry dde = new DetailedDataEntry();
+    //DetailedDataEntry dde = new DetailedDataEntry();
     
     WorkDayEntryGUI()
     {
@@ -47,15 +53,25 @@ public class WorkDayEntryGUI
         cwdLine2.getChildren().addAll(lblRegHours, lblVarRegHours, lblOTHours, lblVarOTHours);
         cwdLine3.getChildren().add(btnNewLine);
 
-        btnNewLine.setOnAction((ActionEvent e) ->
+        btnNewLine.setOnAction((ActionEvent event) ->
         {
-            /*
-            *this button action will pop up a window and get the information described above
-             */
-
+            final Stage dataEntryStage = new Stage();
+            CheckBox chkBoxHoliday = new CheckBox();
+            ComboBox<String> cboPTO = new ComboBox<>();
+            ComboBox cboShiftDuration = new ComboBox();
+            VBox vBoxHolidayPTO = new VBox();
+            HBox hBoxDataEntry = new HBox();
+            chkBoxHoliday.setText("Holiday");
+            cboPTO.getItems().addAll("Sick Day", "Vacation Day", "Personal Day");
+            cboShiftDuration.getItems().addAll("First Half", "Second Half", "24 Hour Shift");
+            cboShiftDuration.getSelectionModel().select("24 Hour Shift");
             
-            dde.DetailedDataEntry();
+            hBoxDataEntry.getChildren().addAll(chkBoxHoliday, cboShiftDuration, cboPTO);
             
+            Scene DetailedDataEntryScene = new Scene(hBoxDataEntry);
+            dataEntryStage.setScene(DetailedDataEntryScene);
+            dataEntryStage.initModality(Modality.APPLICATION_MODAL);
+            dataEntryStage.show();
         });
 
         btnRemoveLine.setOnAction((ActionEvent e)->
