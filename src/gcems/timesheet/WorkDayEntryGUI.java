@@ -1,21 +1,24 @@
 package gcems.timesheet;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 /**
  * Author:  Jim Baize
@@ -37,7 +40,8 @@ public class WorkDayEntryGUI
     HBox cwdLine1 = new HBox();
     HBox cwdLine2 = new HBox();
     HBox cwdLine3 = new HBox();
-    DatePicker dp = new DatePicker();
+    DatePicker dpDate = new DatePicker();
+    Label lblDatePlaceHolder = new Label("Date Placeholder");
     Button btnNewLine = new Button("+");
     Button btnRemoveLine = new Button("-");
     Label lblRegHours = new Label("Regular Hours: ");
@@ -47,28 +51,80 @@ public class WorkDayEntryGUI
     Label lblCustomIn = new Label("In");
     Label lblCustomOut = new Label("Out");
     ArrayList<WorkDayEntryGUI> listWorkDayEntry;
-    //DetailedDataEntry dde = new DetailedDataEntry();
+    //boolean boolIsFirstThurs = false;
+    FirstThursday isFirstThurs = new FirstThursday();
+    boolean isFirstThursNew = false;
+    
+    //Set the DatePicker to only allow the First Thursdays as determined by 
+    //the class FirstThursday
+    
+    
+    /*
+    final Callback<DatePicker, DateCell> dayCellFactory = dp -> new DateCell()
+    {
+    @Override
+    public void updateItem(LocalDate item, boolean empty)
+    {
+    System.out.println("This is the cell factory");
+    super.updateItem(item, empty);
+    
+    System.out.println("BoolIsFirstThurs = " + boolIsFirstThurs);
+    if(boolIsFirstThurs.isFirstThursday() == false)
+    {
+    System.out.println("Inside the if statement of boolIsFirstThurs" + boolIsFirstThurs);
+    setStyle("-fx-background-color: #ffc0cb; -fx-text-fill: darkgray;");
+    setDisable(true);
+    System.out.println("This is inside the if statement of the cell factory");
+    }
+    }
+    };
+    */
+    
     
     WorkDayEntryGUI()
     {
+
+        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>()
+        {
+            @Override
+            public DateCell call(final DatePicker dpDate)
+            {
+                return new DateCell()
+                {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty)
+                    {
+                        super.updateItem(item, empty);
+
+                        if (!isFirstThurs.isFirstThursday())
+                        {
+                            setDisable(true);
+                            setStyle("-fx-background-color: #EEEEEE;");
+                        }
+                    }
+                };
+            }
+        };
+
+        dpDate.setDayCellFactory(dayCellFactory);
+
         listWorkDayEntry = new ArrayList<>();
-        cwdLine1.getChildren().addAll(dp, lblRegHours, lblOTHours, lblVarOTHours);
+        cwdLine1.getChildren().addAll(lblDatePlaceHolder, lblRegHours, lblOTHours, lblVarOTHours);
         cwdLine2.getChildren().addAll(lblRegHours, lblVarRegHours, lblOTHours, lblVarOTHours);
         cwdLine3.getChildren().add(btnNewLine);
 
         btnNewLine.setOnAction((ActionEvent event) ->
         {
-            
             makeDetailedDataEntry();
         });
 
-        btnRemoveLine.setOnAction((ActionEvent e)->
-            {
-                /*
+        btnRemoveLine.setOnAction((ActionEvent e) ->
+        {
+            /*
                 *This button will delete the selected line(s)
-                */
-            });
-        
+             */
+        });
+
         customWorkDay.getChildren().add(cwdLine1);
         customWorkDay.getChildren().add(cwdLine2);
         customWorkDay.getChildren().add(cwdLine3);
@@ -79,6 +135,8 @@ public class WorkDayEntryGUI
         final Stage dataEntryStage = new Stage();
         CheckBox chkBoxHoliday = new CheckBox();
         chkBoxHoliday.setText("Holiday");
+        CheckBox chkBoxNightRun = new CheckBox("Night Run");
+        
         ComboBox<String> cboShiftDuration = new ComboBox<>();
         ComboBox<String> cboPTO = new ComboBox<>();
         
@@ -86,6 +144,7 @@ public class WorkDayEntryGUI
         HBox hBoxDataEntry = new HBox();
         HBox hBoxLineTwo = new HBox();
         HBox hBoxDataEntryThree = new HBox();
+        HBox hBoxDataEntryFour = new HBox();
         VBox root = new VBox();
         
         TimeDials cboCustomHourIn = new TimeDials();
@@ -99,10 +158,8 @@ public class WorkDayEntryGUI
         cboShiftDuration.getSelectionModel().select("24 Hour Shift");
         cboShiftDuration.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> obs, String oldVal, String newVal) ->
             {
-                //hBoxDataEntryThree.getChildren().remove(lblFirstHalf);
-                //hBoxDataEntryThree.getChildren().remove(lblSecondHalf);
-                //hBoxDataEntryThree.getChildren().remove(lblWholeShift);
-                //hBoxDataEntryThree.getChildren().remove(lblCustomShift);
+                hBoxDataEntryThree.getChildren().clear();
+                
                 switch(newVal)
                 {
                     case "First Half":
@@ -118,12 +175,14 @@ public class WorkDayEntryGUI
                         //hoursSingleShift = 16;
                         break;
                     case "Custom Hours":
-                        hBoxDataEntryThree.getChildren().add(lblCustomIn);
-                        hBoxDataEntryThree.getChildren().add(cboCustomHourIn.makeHourDial());
-                        hBoxDataEntryThree.getChildren().add(cboCustomMinuteIn.makeMinuteDial());
-                        hBoxDataEntryThree.getChildren().add(lblCustomOut);
-                        hBoxDataEntryThree.getChildren().add(cboCustomHourOut.makeHourDial());
-                        hBoxDataEntryThree.getChildren().add(cboCustomMinuteOut.makeMinuteDial());
+                        hBoxDataEntryThree.getChildren().add(chkBoxNightRun);
+                        hBoxDataEntryThree.getChildren().add(new Text("Is this a night run or an extention to your shift?"));
+                        hBoxDataEntryFour.getChildren().add(lblCustomIn);
+                        hBoxDataEntryFour.getChildren().add(cboCustomHourIn.makeHourDial());
+                        hBoxDataEntryFour.getChildren().add(cboCustomMinuteIn.makeMinuteDial());
+                        hBoxDataEntryFour.getChildren().add(lblCustomOut);
+                        hBoxDataEntryFour.getChildren().add(cboCustomHourOut.makeHourDial());
+                        hBoxDataEntryFour.getChildren().add(cboCustomMinuteOut.makeMinuteDial());
                         break;
                     default:
                         break;
@@ -138,7 +197,7 @@ public class WorkDayEntryGUI
         
         hBoxDataEntry.getChildren().addAll(chkBoxHoliday, cboShiftDuration, cboPTO);
         hBoxLineTwo.getChildren().add(btnSaveData);
-        root.getChildren().addAll(hBoxDataEntry, hBoxLineTwo, hBoxDataEntryThree);
+        root.getChildren().addAll(hBoxDataEntry, hBoxLineTwo, hBoxDataEntryThree, hBoxDataEntryFour);
         
         Scene DetailedDataEntryScene = new Scene(root);
         dataEntryStage.setScene(DetailedDataEntryScene);
@@ -150,4 +209,12 @@ public class WorkDayEntryGUI
         {
             return (T) customWorkDay;
         }
+    
+    public <T extends Node> T makeFirstThursday()
+    {
+        cwdLine1.getChildren().remove(lblDatePlaceHolder);
+        cwdLine1.getChildren().add(0,dpDate);
+        
+        return (T) customWorkDay;
+    }
 }

@@ -6,23 +6,19 @@
 package gcems.timesheet;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
  *
  * @author pavul
  */
-public class NewGCEMSTimeSheetGUI extends Application
+public class GCEMSTimeSheetGUI extends Application
 {
     
     @Override
@@ -64,7 +60,8 @@ public class NewGCEMSTimeSheetGUI extends Application
         baseGrid.addRow(9); // Wednesday
         
         
-        for(int j=0, k= 0; j<7; j++)
+        baseGrid.add(WorkDay_array[0][0].makeFirstThursday(), 0, 3);
+        for(int j=1, k= 0; j<7; j++)
         {
         baseGrid.add(WorkDay_array[k][j].makeWorkDay(), 0, j+3);//Create a workday and assign it to Week One in the appropriate row
         }
