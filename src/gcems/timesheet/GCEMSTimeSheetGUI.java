@@ -5,6 +5,7 @@
  */
 package gcems.timesheet;
 
+import java.time.LocalDate;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
@@ -29,6 +30,9 @@ public class GCEMSTimeSheetGUI extends Application
         TextField txtFieldEmpName = new TextField();
         Label lblWeekOne = new Label("Week One");
         Label lblWeekTwo = new Label("Week Two");
+        LocalDate firstDate;
+        
+        
         
         //create the WorkDay array and initialize it
         WorkDayEntryGUI[][] WorkDay_array = new WorkDayEntryGUI[2][7];
@@ -40,13 +44,10 @@ public class GCEMSTimeSheetGUI extends Application
             }
         }
         
-        
-        //CustomWorkDay Week1Thursday = new CustomWorkDay();
-        
         GridPane baseGrid = new GridPane();
         //baseGrid.setGridLinesVisible(true);
         baseGrid.addRow(0, lblHeader1);
-        baseGrid.addRow(1,lblEmpName);
+        baseGrid.addRow(1, lblEmpName);
         baseGrid.add(txtFieldEmpName, 1, 1);
         baseGrid.addRow(2);
         baseGrid.add(lblWeekOne, 0, 2);
@@ -64,6 +65,7 @@ public class GCEMSTimeSheetGUI extends Application
         for(int j=1, k= 0; j<7; j++)
         {
         baseGrid.add(WorkDay_array[k][j].makeWorkDay(), 0, j+3);//Create a workday and assign it to Week One in the appropriate row
+        //baseGrid.getChildren().locate(txtFieldDate).setText(WorkDay_array[k][j].getFirstDate());
         }
         
         for(int j=0, k=1; j<7; j++)

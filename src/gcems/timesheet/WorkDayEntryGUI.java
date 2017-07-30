@@ -1,8 +1,11 @@
 package gcems.timesheet;
 
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -13,6 +16,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -40,8 +44,11 @@ public class WorkDayEntryGUI
     HBox cwdLine1 = new HBox();
     HBox cwdLine2 = new HBox();
     HBox cwdLine3 = new HBox();
-    DatePicker dpDate = new DatePicker();
+    //DatePicker dpDate = new DatePicker();
+    DatePicker dpDate = new DatePicker(LocalDate.of(2017,6,29));
+    LocalDate dateOfWorkDay;
     Label lblDatePlaceHolder = new Label("Date Placeholder");
+    TextField txtFieldDate = new TextField();
     Button btnNewLine = new Button("+");
     Button btnRemoveLine = new Button("-");
     Label lblRegHours = new Label("Regular Hours: ");
@@ -52,64 +59,48 @@ public class WorkDayEntryGUI
     Label lblCustomOut = new Label("Out");
     ArrayList<WorkDayEntryGUI> listWorkDayEntry;
     //boolean boolIsFirstThurs = false;
-    FirstThursday isFirstThurs = new FirstThursday();
+    FirstThursday isFirstThurs;
     boolean isFirstThursNew = false;
+    LocalDate referenceDate;
+    
     
     //Set the DatePicker to only allow the First Thursdays as determined by 
     //the class FirstThursday
-    
-    
-    /*
-    final Callback<DatePicker, DateCell> dayCellFactory = dp -> new DateCell()
-    {
-    @Override
-    public void updateItem(LocalDate item, boolean empty)
-    {
-    System.out.println("This is the cell factory");
-    super.updateItem(item, empty);
-    
-    System.out.println("BoolIsFirstThurs = " + boolIsFirstThurs);
-    if(boolIsFirstThurs.isFirstThursday() == false)
-    {
-    System.out.println("Inside the if statement of boolIsFirstThurs" + boolIsFirstThurs);
-    setStyle("-fx-background-color: #ffc0cb; -fx-text-fill: darkgray;");
-    setDisable(true);
-    System.out.println("This is inside the if statement of the cell factory");
-    }
-    }
-    };
-    */
-    
-    
+        
     WorkDayEntryGUI()
     {
-
-        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>()
+        this.referenceDate = LocalDate.of(2017,6,29);
+        dpDate.setOnAction(event -> 
+        {
+            LocalDate selectedDate = dpDate.getValue();
+            
+        });
+        this.isFirstThurs = new FirstThursday(dpDate.getValue());
+        //this.isFirstThurs = new FirstThursday();
+        final Callback<DatePicker, DateCell> dayCellFactory = (final DatePicker dpDate1) -> new DateCell()
         {
             @Override
-            public DateCell call(final DatePicker dpDate)
+            public void updateItem(LocalDate item, boolean empty)
             {
-                return new DateCell()
+                super.updateItem(item, empty);
+                
+                //if (empty || item.getDayOfWeek() != DayOfWeek.THURSDAY);
+                if(empty || ((item.isAfter(referenceDate)) &&
+                ((referenceDate.until(item, ChronoUnit.DAYS)) % 14) == 0))
                 {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty)
-                    {
-                        super.updateItem(item, empty);
-
-                        if (!isFirstThurs.isFirstThursday())
-                        {
-                            setDisable(true);
-                            setStyle("-fx-background-color: #EEEEEE;");
-                        }
-                    }
-                };
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ffc0cb;");
+                }
             }
         };
+        
 
         dpDate.setDayCellFactory(dayCellFactory);
+        
+        txtFieldDate.setText(dateOfWorkDay.toString());
 
         listWorkDayEntry = new ArrayList<>();
-        cwdLine1.getChildren().addAll(lblDatePlaceHolder, lblRegHours, lblOTHours, lblVarOTHours);
+        cwdLine1.getChildren().addAll(txtFieldDate, lblRegHours, lblOTHours, lblVarOTHours);
         cwdLine2.getChildren().addAll(lblRegHours, lblVarRegHours, lblOTHours, lblVarOTHours);
         cwdLine3.getChildren().add(btnNewLine);
 
@@ -213,8 +204,24 @@ public class WorkDayEntryGUI
     public <T extends Node> T makeFirstThursday()
     {
         cwdLine1.getChildren().remove(lblDatePlaceHolder);
+        cwdLine1.getChildren().remove(txtFieldDate);
         cwdLine1.getChildren().add(0,dpDate);
         
         return (T) customWorkDay;
+    }
+    
+    public void setDate(LocalDate incomingDate)
+    {
+        dateOfWorkDay = incomingDate;
+    }
+    
+    public LocalDate getDate()
+    {
+        return dateOfWorkDay;
+    }
+    
+    public LocalDate getFirstDate()
+    {
+        return dpDate.getValue();
     }
 }
