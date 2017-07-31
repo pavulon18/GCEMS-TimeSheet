@@ -97,7 +97,8 @@ public class WorkDayEntryGUI
 
         dpDate.setDayCellFactory(dayCellFactory);
         
-        txtFieldDate.setText(dateOfWorkDay.toString());
+        //txtFieldDate.setText(dateOfWorkDay.toString());
+        
 
         listWorkDayEntry = new ArrayList<>();
         cwdLine1.getChildren().addAll(txtFieldDate, lblRegHours, lblOTHours, lblVarOTHours);
@@ -196,8 +197,10 @@ public class WorkDayEntryGUI
         dataEntryStage.show();
     }
 
-    public <T extends Node> T makeWorkDay()
+    public <T extends Node> T makeWorkDay(int offset)
         {
+            //txtFieldDate.set;   //Ok... Looks like I need to make a date to string converter and then set the text here
+            dateOfWorkDay.plusDays(offset);
             return (T) customWorkDay;
         }
     
