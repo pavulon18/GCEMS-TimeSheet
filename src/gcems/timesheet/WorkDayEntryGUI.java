@@ -86,7 +86,7 @@ public class WorkDayEntryGUI
                 
                 //if (empty || item.getDayOfWeek() != DayOfWeek.THURSDAY);
                 if(empty || ((item.isAfter(referenceDate)) &&
-                ((referenceDate.until(item, ChronoUnit.DAYS)) % 14) == 0))
+                ((referenceDate.until(item, ChronoUnit.DAYS)) % 14) != 0))
                 {
                     setDisable(true);
                     setStyle("-fx-background-color: #ffc0cb;");
@@ -101,7 +101,9 @@ public class WorkDayEntryGUI
         
 
         listWorkDayEntry = new ArrayList<>();
+        //txtFieldDate.setText(dateOfWorkDay.toString());
         cwdLine1.getChildren().addAll(txtFieldDate, lblRegHours, lblOTHours, lblVarOTHours);
+        //cwdLine1.getChildren().addAll(dateOfWorkDay, lblRegHours, lblOTHours, lblVarOTHours);
         cwdLine2.getChildren().addAll(lblRegHours, lblVarRegHours, lblOTHours, lblVarOTHours);
         cwdLine3.getChildren().add(btnNewLine);
 
@@ -200,7 +202,11 @@ public class WorkDayEntryGUI
     public <T extends Node> T makeWorkDay(int offset)
         {
             //txtFieldDate.set;   //Ok... Looks like I need to make a date to string converter and then set the text here
-            dateOfWorkDay.plusDays(offset);
+            //dateOfWorkDay.plusDays(offset);
+            
+            dpDate.getValue().plusDays(offset);
+            txtFieldDate.setText(dpDate.getValue().plusDays(offset).toString());
+            
             return (T) customWorkDay;
         }
     

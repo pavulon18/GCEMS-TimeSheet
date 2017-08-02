@@ -30,7 +30,7 @@ public class WorkWeekGUI
     
     public <T extends Node> T makeWorkWeekOne()
     {
-        
+        System.out.println("Making of WorkWeekOne");
         WorkWeekOne_array = new WorkDayEntryGUI[7]; 
         for (int j = 0; j < 7; j++)                 
         {

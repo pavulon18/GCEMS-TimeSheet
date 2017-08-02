@@ -31,18 +31,19 @@ public class GCEMSTimeSheetGUI extends Application
         Label lblWeekOne = new Label("Week One");
         Label lblWeekTwo = new Label("Week Two");
         LocalDate firstDate;
+        PayPeriodGUI payPeriod = new PayPeriodGUI();
         
-        
-        
+        /*
         //create the WorkDay array and initialize it
         WorkDayEntryGUI[][] WorkDay_array = new WorkDayEntryGUI[2][7];
         for(int k = 0; k < 2; k++)
         {
-            for(int l = 0; l < 7; l++)
-            {
-                WorkDay_array[k][l] = new WorkDayEntryGUI();
-            }
+        for(int l = 0; l < 7; l++)
+        {
+        WorkDay_array[k][l] = new WorkDayEntryGUI();
         }
+        }
+        */
         
         GridPane baseGrid = new GridPane();
         //baseGrid.setGridLinesVisible(true);
@@ -52,15 +53,17 @@ public class GCEMSTimeSheetGUI extends Application
         baseGrid.addRow(2);
         baseGrid.add(lblWeekOne, 0, 2);
         baseGrid.add(lblWeekTwo, 2, 2);
-        baseGrid.addRow(3); // Thursday
-        baseGrid.addRow(4); // Friday
-        baseGrid.addRow(5); // Saturday
-        baseGrid.addRow(6); // Sunday
-        baseGrid.addRow(7); // Monday
-        baseGrid.addRow(8); // Tuesday
-        baseGrid.addRow(9); // Wednesday
+        baseGrid.addRow(3, payPeriod.makePayPeriod());
+        //baseGrid.addRow(4); // Friday
+        //baseGrid.addRow(5); // Saturday
+        //baseGrid.addRow(6); // Sunday
+        //baseGrid.addRow(7); // Monday
+        //baseGrid.addRow(8); // Tuesday
+        //baseGrid.addRow(9); // Wednesday
         
+        //baseGrid.add(payPeriod.makePayPeriod(), 0, 3);
         
+        /*
         baseGrid.add(WorkDay_array[0][0].makeFirstThursday(), 0, 3);
         for(int j=1, k= 0; j<7; j++)
         {
@@ -72,6 +75,9 @@ public class GCEMSTimeSheetGUI extends Application
         {
         baseGrid.add(WorkDay_array[k][j].makeWorkDay(), 2, j+3);//Create a workday and assign it to Week Two in the appropriate row
         }
+        */
+        
+        
         
         //Set alignments and Spannings
         GridPane.setHalignment(lblHeader1, HPos.CENTER);

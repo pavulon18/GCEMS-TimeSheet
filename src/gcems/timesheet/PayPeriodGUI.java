@@ -15,34 +15,37 @@ import javafx.scene.layout.HBox;
     so I am trying a different approach.
     */
 
-public class PayPeriodGUI extends WorkWeekGUI
+public class PayPeriodGUI
 {
-    PayPeriodGUI[] PayPeriod_array;
-    HBox hboxPayPeriod;
+    //PayPeriodGUI[] PayPeriod_array;
+    HBox hboxPayPeriod = new HBox();
+    WorkWeekGUI workWeekOne;
+    WorkWeekGUI workWeekTwo;
     
     LocalDate firstThursday;
     
     public PayPeriodGUI()
-    {
+    { 
+        workWeekOne = new WorkWeekGUI();
+        workWeekTwo = new WorkWeekGUI();
+        //PayPeriod_array = new PayPeriodGUI[2];
+        //PayPeriod_array[0] = new PayPeriodGUI();
+        //PayPeriod_array[1] = new PayPeriodGUI();
         
-        PayPeriod_array = new PayPeriodGUI[2];
+        //WorkDayEntryGUI[][] WorkDay_array = new WorkDayEntryGUI[2][7];
+        //WorkDay_array[k][l] = new WorkDayEntryGUI();
         
-        hboxPayPeriod.getChildren().add(PayPeriod_array[0].makeWorkWeekOne());
-        hboxPayPeriod.getChildren().add(PayPeriod_array[1].makeWorkWeekTwo());
+        System.out.println("Making of PayPeriodGUI");
         
-        
+        hboxPayPeriod.getChildren().add(workWeekOne.makeWorkWeekOne());
+        hboxPayPeriod.getChildren().add(workWeekTwo.makeWorkWeekTwo());
     }
     
-    /*public LocalDate getFirstThursday()
+    public <T extends Node> T makePayPeriod()
     {
-    LocalDate firstThursday;
-    return firstThursday;
+        System.out.println("start of makePayPeriod()");
+        return (T) hboxPayPeriod;
     }
-    
-    public void setFirstThursday(LocalDate firstThursday)
-    {
-    this.firstThursday = firstThursday;
-    }*/
     
 }
 
