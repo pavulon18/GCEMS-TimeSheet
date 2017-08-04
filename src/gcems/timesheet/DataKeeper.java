@@ -6,6 +6,7 @@
 package gcems.timesheet;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,23 +17,15 @@ import java.time.LocalDate;
  */
 public class DataKeeper
 {
-
-    LocalDate firstThursday;
-    LocalDate referenceDate;
+    ArrayList dailyData;
     
     public DataKeeper()
     {
-        referenceDate = LocalDate.of(2017,6,29);
+       
     }
     
-    public LocalDate getFirstThursday()
+    public void getDailyData(LocalDate date, Boolean isHoliday, Boolean isPTO, long regHoursWorked, long otHoursWorked)
     {
-        return firstThursday;
+        
     }
-    
-    public void setFirstThursday(LocalDate firstThursday)
-    {
-        this.firstThursday = firstThursday;
-    }
-
 }

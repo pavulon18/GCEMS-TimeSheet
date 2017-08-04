@@ -75,7 +75,11 @@ public class WorkDayEntryGUI
             LocalDate selectedDate = dpDate.getValue();
             
         });
-        this.isFirstThurs = new FirstThursday(dpDate.getValue());
+        
+        //dpDate.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> obs, String oldVal, String newVal) ->
+           // {
+        
+        //this.isFirstThurs = new FirstThursday(dpDate.getValue());
         //this.isFirstThurs = new FirstThursday();
         final Callback<DatePicker, DateCell> dayCellFactory = (final DatePicker dpDate1) -> new DateCell()
         {
@@ -84,7 +88,6 @@ public class WorkDayEntryGUI
             {
                 super.updateItem(item, empty);
                 
-                //if (empty || item.getDayOfWeek() != DayOfWeek.THURSDAY);
                 if(empty || ((item.isAfter(referenceDate)) &&
                 ((referenceDate.until(item, ChronoUnit.DAYS)) % 14) != 0))
                 {
@@ -157,18 +160,27 @@ public class WorkDayEntryGUI
                 switch(newVal)
                 {
                     case "First Half":
+                        hBoxDataEntryThree.getChildren().clear();
+                        hBoxDataEntryFour.getChildren().clear();
                         //cwdLine1.getChildren().add(lblFirstHalf);
                         //hoursSingleShift = 12;
                         break;
                     case "Second Half":
+                        hBoxDataEntryThree.getChildren().clear();
+                        hBoxDataEntryFour.getChildren().clear();
                         //cwdLine1.getChildren().add(lblSecondHalf);
                         //hoursSingleShift = 12;
                         break;    
-                    case "Whole Shift":
+                    case "24 Hour Shift":
+                        hBoxDataEntryThree.getChildren().clear();
+                        hBoxDataEntryFour.getChildren().clear();
                         //cwdLine1.getChildren().add(lblWholeShift);
                         //hoursSingleShift = 16;
                         break;
                     case "Custom Hours":
+                        hBoxDataEntryThree.getChildren().clear();
+                        hBoxDataEntryFour.getChildren().clear();
+                        
                         hBoxDataEntryThree.getChildren().add(chkBoxNightRun);
                         hBoxDataEntryThree.getChildren().add(new Text("Is this a night run or an extention to your shift?"));
                         hBoxDataEntryFour.getChildren().add(lblCustomIn);
