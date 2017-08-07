@@ -62,6 +62,7 @@ public class WorkDayEntryGUI
     FirstThursday isFirstThurs;
     boolean isFirstThursNew = false;
     LocalDate referenceDate;
+    int offset = 0;
     
     
     //Set the DatePicker to only allow the First Thursdays as determined by 
@@ -70,17 +71,33 @@ public class WorkDayEntryGUI
     WorkDayEntryGUI()
     {
         this.referenceDate = LocalDate.of(2017,6,29);
-        dpDate.setOnAction(event -> 
+        dateOfWorkDay = referenceDate;
+        
+        dpDate.setOnAction((ActionEvent event) ->
         {
-            LocalDate selectedDate = dpDate.getValue();
-            
+        //LocalDate selectedDate = dpDate.getValue();
+        txtFieldDate.setText(dpDate.getValue().plusDays(offset).toString());
         });
         
         //dpDate.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> obs, String oldVal, String newVal) ->
            // {
+           
+           dpDate.setEditable(false);
+           
         
-        //this.isFirstThurs = new FirstThursday(dpDate.getValue());
-        //this.isFirstThurs = new FirstThursday();
+           
+           //dpDate.valueProperty().addListener((ObservableValue<? extends LocalDate> observable, LocalDate oldDate, LocalDate newDate)->
+           //{ 
+           //    /* your code here */ 
+           //    //LocalDate selectedDate = dpDate.getValue();
+           //    //LocalDate selectedDate = newDate;
+           //    dateOfWorkDay = newDate;
+           //    //txtFieldDate.setText(dpDate.getValue().plusDays(offset).toString());
+           //    txtFieldDate.setText(newDate.plusDays(offset).toString());
+           //    //txtFieldDate.setText(dateOfWorkDay.plusDays(offset).toString());
+           //});
+           
+           
         final Callback<DatePicker, DateCell> dayCellFactory = (final DatePicker dpDate1) -> new DateCell()
         {
             @Override
@@ -197,6 +214,7 @@ public class WorkDayEntryGUI
         
         btnSaveData.setOnAction(e ->
         {
+            
             dataEntryStage.close();
         });
  
@@ -218,6 +236,8 @@ public class WorkDayEntryGUI
             
             dpDate.getValue().plusDays(offset);
             txtFieldDate.setText(dpDate.getValue().plusDays(offset).toString());
+            //txtFieldDate.setText(dateOfWorkDay.plusDays(offset).toString());
+            //txtFieldDate.setText(selectedDate);
             
             return (T) customWorkDay;
         }
