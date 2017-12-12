@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author pavul
+ * @author Jim Baize
  */
 public class GCEMSTimeSheetGUI extends Application
 {

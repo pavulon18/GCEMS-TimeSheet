@@ -1,0 +1,15 @@
+ToDo: (In no certain order)
+
+1) on my regular work days, I currently have a + and a -.  The plus was to add a line dedicated to night runs
+This, it seems is not going to work like I had originally envisioned.  For example, if I go in to work for my regularly scheduled shift
+and then go home sick before the end of my shift, I will need to have two separate entries for one day.  Therefore, my current idea is to 
+take the line that was supposed to be strictly for night runs and make it a pop up window.  In this window, I will gather all the needed information,
+including asking if this is regular hours, PTO hours, or night runs.  I'm thinking I can do it with a combo box.
+
+2) FORMATTING
+The whole thing needs formatted.
+
+3) Work on the back end
+I still have to work on the classes that will accept the hours, do the calculations, and then display the info.
+
+4) Still have to add in the ability to show if a shift is a Holiday or not.
